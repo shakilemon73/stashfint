@@ -1,10 +1,13 @@
 import backgroundImage from "@assets/stock_images/abstract_gradient_ba_5c77e62a.jpg";
-import ModernHeader from "@/components/ModernHeader";
-import ModernTimeBalance from "@/components/ModernTimeBalance";
-import ModernPayPeriod from "@/components/ModernPayPeriod";
-import ModernQuickActions from "@/components/ModernQuickActions";
-import ModernTransactionList from "@/components/ModernTransactionList";
-import ModernBottomNav from "@/components/ModernBottomNav";
+import { Download } from "lucide-react";
+import SimpleHeader from "@/components/SimpleHeader";
+import HeroBalanceCard from "@/components/HeroBalanceCard";
+import WorkStatusCard from "@/components/WorkStatusCard";
+import PayPeriodCard from "@/components/PayPeriodCard";
+import PrimaryActionButton from "@/components/PrimaryActionButton";
+import SecondaryActions from "@/components/SecondaryActions";
+import TransactionSection from "@/components/TransactionSection";
+import SimpleBottomNav from "@/components/SimpleBottomNav";
 
 export default function Home() {
   const mockTransactions = [
@@ -48,10 +51,18 @@ export default function Home() {
       status: "failed" as const,
       type: "debit" as const,
     },
+    {
+      id: "6",
+      company: "Startup Co",
+      date: "Mar 10",
+      amount: 1250.00,
+      status: "sent" as const,
+      type: "credit" as const,
+    },
   ];
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative">
       <div 
         className="fixed inset-0 z-0"
         style={{
@@ -62,41 +73,44 @@ export default function Home() {
         }}
       />
       
-      <div className="fixed inset-0 z-0 bg-gradient-to-b from-background/95 via-background/90 to-background/95" />
+      <div className="fixed inset-0 z-0 bg-background/95" />
 
-      <div className="relative z-10 min-h-screen">
-        <div className="max-w-md mx-auto pb-32">
-          <ModernHeader userName="JOHN DOE" hasNotifications={true} />
+      <div className="relative z-10 min-h-screen flex flex-col">
+        <SimpleHeader userName="John Doe" hasNotifications={true} />
 
-          <div className="p-4 space-y-5">
-            <div className="text-center py-4">
-              <h1 className="font-display text-3xl font-bold bg-gradient-to-r from-chart-1 via-gold to-chart-2 bg-clip-text text-transparent">
-                DASHBOARD
-              </h1>
-              <p className="text-sm text-muted-foreground mt-1">Track your earnings in real-time</p>
+        <div className="flex-1 max-w-md mx-auto w-full pb-24">
+          <div className="p-4 space-y-6">
+            <HeroBalanceCard balance={2461.25} todayEarnings={130.00} />
+
+            <div className="space-y-6 pt-2">
+              <WorkStatusCard workHours={6.5} hourlyRate={20} status="active" />
+              
+              <PayPeriodCard 
+                startDate="Mar 1"
+                endDate="Mar 15"
+                daysCompleted={8}
+                totalDays={14}
+              />
             </div>
 
-            <ModernTimeBalance 
-              balance={2461.25} 
-              workHours={6.5} 
-              hourlyRate={20} 
-              todayEarnings={130.00} 
-            />
+            <div className="space-y-3 pt-2">
+              <PrimaryActionButton
+                icon={Download}
+                label="Request Money"
+                onClick={() => console.log('Request Money clicked')}
+                testId="button-request-money"
+              />
 
-            <ModernPayPeriod 
-              startDate="Mar 1"
-              endDate="Mar 15"
-              daysCompleted={8}
-              totalDays={14}
-            />
+              <SecondaryActions />
+            </div>
 
-            <ModernQuickActions />
-
-            <ModernTransactionList transactions={mockTransactions} />
+            <div className="pt-4">
+              <TransactionSection transactions={mockTransactions} />
+            </div>
           </div>
-
-          <ModernBottomNav />
         </div>
+
+        <SimpleBottomNav />
       </div>
     </div>
   );
