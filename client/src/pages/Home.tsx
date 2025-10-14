@@ -61,6 +61,10 @@ export default function Home() {
     },
   ];
 
+  const handleToggleWork = () => {
+    console.log('Toggle work status');
+  };
+
   return (
     <div className="min-h-screen relative">
       <div 
@@ -71,19 +75,30 @@ export default function Home() {
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
         }}
+        role="img"
+        aria-label="Abstract gradient background"
       />
       
       <div className="fixed inset-0 z-0 bg-background/95" />
 
       <div className="relative z-10 min-h-screen flex flex-col">
-        <SimpleHeader userName="John Doe" hasNotifications={true} />
+        <SimpleHeader userName="John Doe" hasNotifications={true} notificationCount={3} />
 
-        <div className="flex-1 max-w-md mx-auto w-full pb-24">
+        <main 
+          className="flex-1 max-w-md mx-auto w-full pb-28"
+          role="main"
+          aria-label="Dashboard content"
+        >
           <div className="p-4 space-y-6">
             <HeroBalanceCard balance={2461.25} todayEarnings={130.00} />
 
-            <div className="space-y-6 pt-2">
-              <WorkStatusCard workHours={6.5} hourlyRate={20} status="active" />
+            <section className="space-y-6 pt-2" aria-label="Work information">
+              <WorkStatusCard 
+                workHours={6.5} 
+                hourlyRate={20} 
+                status="active" 
+                onToggleStatus={handleToggleWork}
+              />
               
               <PayPeriodCard 
                 startDate="Mar 1"
@@ -91,9 +106,9 @@ export default function Home() {
                 daysCompleted={8}
                 totalDays={14}
               />
-            </div>
+            </section>
 
-            <div className="space-y-3 pt-2">
+            <section className="space-y-3 pt-2" aria-label="Quick actions">
               <PrimaryActionButton
                 icon={Download}
                 label="Request Money"
@@ -102,13 +117,13 @@ export default function Home() {
               />
 
               <SecondaryActions />
-            </div>
+            </section>
 
-            <div className="pt-4">
+            <section className="pt-4" aria-label="Transaction history">
               <TransactionSection transactions={mockTransactions} />
-            </div>
+            </section>
           </div>
-        </div>
+        </main>
 
         <SimpleBottomNav />
       </div>

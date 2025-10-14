@@ -303,4 +303,106 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+
+  /* Steve Krug - Scannability & Clarity */
+  .scannable-text {
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+  }
+
+  /* Julie Zhuo - 8px Grid System */
+  .spacing-xs { @apply p-2; }
+  .spacing-sm { @apply p-4; }
+  .spacing-md { @apply p-6; }
+  .spacing-lg { @apply p-8; }
+
+  /* Aarron Walter - Emotional Design with smooth micro-interactions */
+  @keyframes subtle-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .micro-bounce:hover {
+    animation: subtle-bounce 0.3s ease-in-out;
+  }
+
+  .smooth-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Farai Madzima - Accessibility & Inclusive Design */
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 0.25rem;
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 3px solid hsl(var(--ring));
+    outline-offset: 3px;
+  }
+
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    :root {
+      --elevate-1: rgba(0,0,0, .08);
+      --elevate-2: rgba(0,0,0, .15);
+    }
+    .dark {
+      --elevate-1: rgba(255,255,255, .08);
+      --elevate-2: rgba(255,255,255, .15);
+    }
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Dieter Rams - Minimal & Aesthetic */
+  .minimalist-card {
+    @apply rounded-2xl border border-border/30 p-4;
+  }
+
+  /* Alan Cooper - Direct Manipulation & Forgiveness */
+  .draggable {
+    cursor: grab;
+    user-select: none;
+  }
+
+  .draggable:active {
+    cursor: grabbing;
+  }
+
+  /* Susan Weinschenk - Psychology: Recognition over Recall */
+  .icon-label-pair {
+    @apply flex items-center gap-2;
+  }
+
+  /* Jonathan Ive - Attention to Details */
+  .subtle-shadow {
+    box-shadow: 0 1px 3px 0 hsl(var(--foreground) / 0.05);
+  }
+
+  .safe-area-pb {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  /* Tabular numbers for consistent number display */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
 }
