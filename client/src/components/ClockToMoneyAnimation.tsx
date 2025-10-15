@@ -32,7 +32,7 @@ export default function ClockToMoneyAnimation({ isActive, balance, workHours, ho
     const coinInterval = setInterval(() => {
       const newCoin: Coin = {
         id: `coin-${Date.now()}-${Math.random()}`,
-        startY: Math.random() * 40 - 20,
+        startY: Math.random() * 20 - 10,
       };
       setCoins(prev => [...prev, newCoin]);
       
@@ -52,7 +52,7 @@ export default function ClockToMoneyAnimation({ isActive, balance, workHours, ho
       <div className="absolute inset-0 bg-gradient-to-br from-chart-1/10 via-gold/10 to-chart-2/10 rounded-3xl" />
       
       <div className="relative px-6 py-8">
-        <div className="flex items-center justify-between gap-6">
+        <div className="relative flex items-center justify-between gap-6">
           {/* Balance with Coin Stack */}
           <div className="flex-1 space-y-3">
             <div className="relative h-24 flex items-end justify-start">
@@ -83,34 +83,6 @@ export default function ClockToMoneyAnimation({ isActive, balance, workHours, ho
                   transition={{ duration: 1, repeat: isActive ? Infinity : 0, delay: 0.2 }}
                 />
               </div>
-
-              {/* Flying Coins Animation */}
-              <AnimatePresence>
-                {coins.map((coin) => (
-                  <motion.div
-                    key={coin.id}
-                    className="absolute"
-                    style={{ right: -100, top: `calc(50% + ${coin.startY}px)` }}
-                    initial={{ x: 0, y: 0, opacity: 0, scale: 0.5, rotate: 0 }}
-                    animate={{ 
-                      x: [-100, -150, -200],
-                      y: [0, -20, 10],
-                      opacity: [0, 1, 0],
-                      scale: [0.5, 1, 0.8],
-                      rotate: [0, 180, 360],
-                    }}
-                    exit={{ opacity: 0 }}
-                    transition={{ 
-                      duration: 2,
-                      ease: [0.4, 0.0, 0.2, 1],
-                    }}
-                  >
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-yellow-600 border-2 border-gold/50 shadow-xl flex items-center justify-center">
-                      <span className="text-white font-bold text-sm">$</span>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
             </div>
 
             <div className="space-y-1">
@@ -122,6 +94,37 @@ export default function ClockToMoneyAnimation({ isActive, balance, workHours, ho
               </p>
             </div>
           </div>
+
+          {/* Flying Coins Animation - from clock to stack */}
+          <AnimatePresence>
+            {coins.map((coin) => (
+              <motion.div
+                key={coin.id}
+                className="absolute top-1/2"
+                style={{ 
+                  right: '15%',
+                  translateY: `${coin.startY}px` 
+                }}
+                initial={{ x: 0, y: 0, opacity: 0, scale: 0.5, rotate: 0 }}
+                animate={{ 
+                  x: [0, -200, -400],
+                  y: [0, -25, 15],
+                  opacity: [0, 1, 0],
+                  scale: [0.5, 1, 0.6],
+                  rotate: [0, 180, 360],
+                }}
+                exit={{ opacity: 0 }}
+                transition={{ 
+                  duration: 2,
+                  ease: [0.4, 0.0, 0.2, 1],
+                }}
+              >
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-yellow-600 border-2 border-gold/50 shadow-xl flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">$</span>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
 
           {/* Clock Section */}
           <div className="flex-1 flex flex-col items-end space-y-3">
