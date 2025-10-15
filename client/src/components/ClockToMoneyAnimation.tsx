@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock } from "lucide-react";
+import { Clock, Coins } from "lucide-react";
 
 interface ClockToMoneyAnimationProps {
   isActive: boolean;
@@ -120,7 +120,7 @@ export default function ClockToMoneyAnimation({ isActive, balance, workHours, ho
                 }}
               >
                 <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-yellow-600 border-2 border-gold/50 shadow-xl flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">$</span>
+                  <Coins className="w-5 h-5 text-white" />
                 </div>
               </motion.div>
             ))}

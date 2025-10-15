@@ -2,9 +2,7 @@ import { useState } from "react";
 import backgroundImage from "@assets/stock_images/abstract_gradient_ba_5c77e62a.jpg";
 import { Download } from "lucide-react";
 import SimpleHeader from "@/components/SimpleHeader";
-import HeroBalanceCard from "@/components/HeroBalanceCard";
 import ClockToMoneyAnimation from "@/components/ClockToMoneyAnimation";
-import WorkStatusCard from "@/components/WorkStatusCard";
 import PayPeriodCard from "@/components/PayPeriodCard";
 import PrimaryActionButton from "@/components/PrimaryActionButton";
 import SecondaryActions from "@/components/SecondaryActions";
@@ -64,14 +62,6 @@ export default function Home() {
     },
   ];
 
-  const handleToggleWork = () => {
-    setWorkStatus(prev => {
-      if (prev === "active") return "paused";
-      if (prev === "paused") return "active";
-      return "active";
-    });
-  };
-
   return (
     <div className="min-h-screen relative">
       <div 
@@ -97,8 +87,6 @@ export default function Home() {
           aria-label="Dashboard content"
         >
           <div className="p-4 space-y-6">
-            <HeroBalanceCard balance={2461.25} todayEarnings={130.00} />
-
             <ClockToMoneyAnimation 
               isActive={workStatus === "active"} 
               balance={2461.25}
@@ -107,13 +95,6 @@ export default function Home() {
             />
 
             <section className="space-y-6 pt-2" aria-label="Work information">
-              <WorkStatusCard 
-                workHours={6.5} 
-                hourlyRate={20} 
-                status={workStatus} 
-                onToggleStatus={handleToggleWork}
-              />
-              
               <PayPeriodCard 
                 startDate="Mar 1"
                 endDate="Mar 15"
