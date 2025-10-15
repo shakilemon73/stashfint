@@ -99,7 +99,12 @@ export default function Home() {
           <div className="p-4 space-y-6">
             <HeroBalanceCard balance={2461.25} todayEarnings={130.00} />
 
-            <ClockToMoneyAnimation isActive={workStatus === "active"} hourlyRate={20} />
+            <ClockToMoneyAnimation 
+              isActive={workStatus === "active"} 
+              balance={2461.25}
+              workHours={6.5}
+              hourlyRate={20} 
+            />
 
             <section className="space-y-6 pt-2" aria-label="Work information">
               <WorkStatusCard 
