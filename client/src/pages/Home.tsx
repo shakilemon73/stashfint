@@ -1,7 +1,9 @@
+import { useState } from "react";
 import backgroundImage from "@assets/stock_images/abstract_gradient_ba_5c77e62a.jpg";
 import { Download } from "lucide-react";
 import SimpleHeader from "@/components/SimpleHeader";
 import HeroBalanceCard from "@/components/HeroBalanceCard";
+import ClockToMoneyAnimation from "@/components/ClockToMoneyAnimation";
 import WorkStatusCard from "@/components/WorkStatusCard";
 import PayPeriodCard from "@/components/PayPeriodCard";
 import PrimaryActionButton from "@/components/PrimaryActionButton";
@@ -10,6 +12,7 @@ import TransactionSection from "@/components/TransactionSection";
 import SimpleBottomNav from "@/components/SimpleBottomNav";
 
 export default function Home() {
+  const [workStatus, setWorkStatus] = useState<"active" | "paused" | "offline">("active");
   const mockTransactions = [
     {
       id: "1",
@@ -62,7 +65,11 @@ export default function Home() {
   ];
 
   const handleToggleWork = () => {
-    console.log('Toggle work status');
+    setWorkStatus(prev => {
+      if (prev === "active") return "paused";
+      if (prev === "paused") return "active";
+      return "active";
+    });
   };
 
   return (
@@ -92,11 +99,13 @@ export default function Home() {
           <div className="p-4 space-y-6">
             <HeroBalanceCard balance={2461.25} todayEarnings={130.00} />
 
+            <ClockToMoneyAnimation isActive={workStatus === "active"} hourlyRate={20} />
+
             <section className="space-y-6 pt-2" aria-label="Work information">
               <WorkStatusCard 
                 workHours={6.5} 
                 hourlyRate={20} 
-                status="active" 
+                status={workStatus} 
                 onToggleStatus={handleToggleWork}
               />
               
