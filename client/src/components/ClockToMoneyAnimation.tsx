@@ -1,20 +1,27 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, DollarSign } from "lucide-react";
+import { Clock } from "lucide-react";
 
 interface ClockToMoneyAnimationProps {
   isActive: boolean;
+  balance: number;
+  workHours: number;
   hourlyRate: number;
 }
 
 interface Coin {
   id: string;
-  delay: number;
+  startY: number;
 }
 
-export default function ClockToMoneyAnimation({ isActive, hourlyRate }: ClockToMoneyAnimationProps) {
+export default function ClockToMoneyAnimation({ isActive, balance, workHours, hourlyRate }: ClockToMoneyAnimationProps) {
   const [coins, setCoins] = useState<Coin[]>([]);
-  const [rotation, setRotation] = useState(0);
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     if (!isActive) {
@@ -25,91 +32,141 @@ export default function ClockToMoneyAnimation({ isActive, hourlyRate }: ClockToM
     const coinInterval = setInterval(() => {
       const newCoin: Coin = {
         id: `coin-${Date.now()}-${Math.random()}`,
-        delay: 0,
+        startY: Math.random() * 40 - 20,
       };
       setCoins(prev => [...prev, newCoin]);
       
       setTimeout(() => {
         setCoins(prev => prev.filter(c => c.id !== newCoin.id));
-      }, 2000);
-    }, 800);
+      }, 2500);
+    }, 600);
 
     return () => clearInterval(coinInterval);
   }, [isActive]);
 
-  useEffect(() => {
-    if (!isActive) return;
-    
-    const rotationInterval = setInterval(() => {
-      setRotation(prev => (prev + 6) % 360);
-    }, 100);
-
-    return () => clearInterval(rotationInterval);
-  }, [isActive]);
+  const hours = time.getHours().toString().padStart(2, '0');
+  const minutes = time.getMinutes().toString().padStart(2, '0');
 
   return (
-    <div className="relative w-full h-48 flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-chart-1/5 via-gold/5 to-chart-2/5 rounded-3xl" />
+    <div className="relative">
+      <div className="absolute inset-0 bg-gradient-to-br from-chart-1/10 via-gold/10 to-chart-2/10 rounded-3xl" />
       
-      <div className="relative flex items-center justify-between w-full px-12">
-        <motion.div 
-          className="relative flex items-center justify-center"
-          animate={{ scale: isActive ? [1, 1.05, 1] : 1 }}
-          transition={{ duration: 2, repeat: isActive ? Infinity : 0 }}
-        >
-          <div className={`absolute inset-0 rounded-full ${isActive ? 'bg-chart-1/20 animate-ping' : 'bg-muted/10'}`} style={{ width: 100, height: 100 }} />
-          <div className={`relative w-24 h-24 rounded-full ${isActive ? 'bg-gradient-to-br from-chart-1 to-chart-2' : 'bg-muted'} flex items-center justify-center shadow-lg`}>
-            <Clock className="w-12 h-12 text-white" style={{ transform: `rotate(${rotation}deg)` }} />
-          </div>
-        </motion.div>
-
-        <AnimatePresence>
-          {coins.map((coin) => (
-            <motion.div
-              key={coin.id}
-              className="absolute left-1/4 top-1/2 -translate-y-1/2"
-              initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
-              animate={{ 
-                x: [0, 100, 200],
-                y: [0, -30, 0],
-                opacity: [1, 0.8, 0],
-                scale: [1, 1.2, 0.5],
-              }}
-              exit={{ opacity: 0 }}
-              transition={{ 
-                duration: 1.5,
-                ease: "easeInOut",
-                delay: coin.delay,
-              }}
-            >
-              <div className="w-8 h-8 rounded-full bg-gold flex items-center justify-center shadow-lg border-2 border-gold/50">
-                <DollarSign className="w-5 h-5 text-white" />
+      <div className="relative px-6 py-8">
+        <div className="flex items-center justify-between gap-6">
+          {/* Balance with Coin Stack */}
+          <div className="flex-1 space-y-3">
+            <div className="relative h-24 flex items-end justify-start">
+              {/* Coin Stack */}
+              <div className="relative">
+                <motion.div 
+                  className="w-16 h-4 rounded-full bg-gold border-2 border-gold/60 shadow-lg"
+                  animate={{ 
+                    scale: isActive ? [1, 1.05, 1] : 1,
+                    y: isActive ? [0, -2, 0] : 0 
+                  }}
+                  transition={{ duration: 1, repeat: isActive ? Infinity : 0 }}
+                />
+                <motion.div 
+                  className="absolute top-[-6px] left-0 w-16 h-4 rounded-full bg-gold border-2 border-gold/60 shadow-lg"
+                  animate={{ 
+                    scale: isActive ? [1, 1.05, 1] : 1,
+                    y: isActive ? [0, -2, 0] : 0 
+                  }}
+                  transition={{ duration: 1, repeat: isActive ? Infinity : 0, delay: 0.1 }}
+                />
+                <motion.div 
+                  className="absolute top-[-12px] left-0 w-16 h-4 rounded-full bg-gold border-2 border-gold/60 shadow-lg"
+                  animate={{ 
+                    scale: isActive ? [1, 1.05, 1] : 1,
+                    y: isActive ? [0, -2, 0] : 0 
+                  }}
+                  transition={{ duration: 1, repeat: isActive ? Infinity : 0, delay: 0.2 }}
+                />
               </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
 
-        <motion.div
-          className="relative"
-          animate={{ scale: isActive ? [1, 1.1, 1] : 1 }}
-          transition={{ duration: 1.5, repeat: isActive ? Infinity : 0 }}
-        >
-          <div className={`w-24 h-24 rounded-2xl ${isActive ? 'bg-success-green/20 border-2 border-success-green/40' : 'bg-muted/20 border-2 border-muted/40'} flex flex-col items-center justify-center shadow-lg`}>
-            <DollarSign className={`w-8 h-8 ${isActive ? 'text-success-green' : 'text-muted-foreground'}`} />
-            <span className={`text-sm font-bold mt-1 ${isActive ? 'text-success-green' : 'text-muted-foreground'}`}>
-              ${hourlyRate}/hr
-            </span>
+              {/* Flying Coins Animation */}
+              <AnimatePresence>
+                {coins.map((coin) => (
+                  <motion.div
+                    key={coin.id}
+                    className="absolute"
+                    style={{ right: -100, top: `calc(50% + ${coin.startY}px)` }}
+                    initial={{ x: 0, y: 0, opacity: 0, scale: 0.5, rotate: 0 }}
+                    animate={{ 
+                      x: [-100, -150, -200],
+                      y: [0, -20, 10],
+                      opacity: [0, 1, 0],
+                      scale: [0.5, 1, 0.8],
+                      rotate: [0, 180, 360],
+                    }}
+                    exit={{ opacity: 0 }}
+                    transition={{ 
+                      duration: 2,
+                      ease: [0.4, 0.0, 0.2, 1],
+                    }}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-yellow-600 border-2 border-gold/50 shadow-xl flex items-center justify-center">
+                      <span className="text-white font-bold text-sm">$</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+
+            <div className="space-y-1">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                Stush Wage Balance:
+              </p>
+              <p className="text-3xl font-bold text-foreground tabular-nums">
+                ${balance.toFixed(2)}
+              </p>
+            </div>
           </div>
-        </motion.div>
-      </div>
 
-      {isActive && (
-        <div className="absolute bottom-4 left-0 right-0 text-center">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-            Money Flowing to Your Balance
-          </p>
+          {/* Clock Section */}
+          <div className="flex-1 flex flex-col items-end space-y-3">
+            <div className="relative">
+              {isActive && (
+                <motion.div 
+                  className="absolute inset-0 rounded-full bg-chart-1/20"
+                  animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  style={{ width: 100, height: 100 }}
+                />
+              )}
+              <div className={`relative w-24 h-24 rounded-full ${isActive ? 'bg-gradient-to-br from-chart-1 to-chart-2' : 'bg-muted'} border-4 ${isActive ? 'border-white/20' : 'border-muted/40'} flex items-center justify-center shadow-xl`}>
+                <Clock className={`w-10 h-10 ${isActive ? 'text-white' : 'text-muted-foreground'}`} />
+                {/* Clock Hands */}
+                <div className={`absolute top-1/2 left-1/2 w-0.5 h-7 ${isActive ? 'bg-white' : 'bg-muted-foreground'} origin-bottom`} style={{ transform: `translate(-50%, -100%) rotate(${(parseInt(hours) % 12) * 30 + parseInt(minutes) * 0.5}deg)` }} />
+                <div className={`absolute top-1/2 left-1/2 w-0.5 h-9 ${isActive ? 'bg-white/80' : 'bg-muted-foreground/80'} origin-bottom`} style={{ transform: `translate(-50%, -100%) rotate(${parseInt(minutes) * 6}deg)` }} />
+                <div className={`absolute top-1/2 left-1/2 w-2 h-2 rounded-full ${isActive ? 'bg-white' : 'bg-muted-foreground'}`} style={{ transform: 'translate(-50%, -50%)' }} />
+              </div>
+            </div>
+
+            <div className="text-right space-y-1">
+              <div className="flex items-center gap-2 justify-end">
+                <span className="text-xs font-semibold text-muted-foreground">Status:</span>
+                <div className="flex items-center gap-1.5">
+                  <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-success-green animate-pulse' : 'bg-muted-foreground'}`} />
+                  <span className={`text-xs font-bold ${isActive ? 'text-success-green' : 'text-muted-foreground'}`}>
+                    {isActive ? 'On the Clock' : 'Off Duty'}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="space-y-0.5">
+                <p className="text-xs font-semibold text-muted-foreground">Work Hours:</p>
+                <p className={`text-xl font-bold tabular-nums ${isActive ? 'text-chart-1' : 'text-muted-foreground'}`}>
+                  {workHours.toFixed(2)} HRS.
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  @ ${hourlyRate.toFixed(2)}/hr
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
