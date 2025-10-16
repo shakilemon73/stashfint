@@ -51,58 +51,53 @@ export default function ClockToMoneyAnimation({ isActive, balance, workHours, ho
   
   return (
     <div className="relative overflow-visible" data-testid="card-balance-clock">
-      {/* Card Background - Material Design elevation */}
       <div className="absolute inset-0 bg-card rounded-2xl border border-border shadow-md" />
       
-      {/* 16dp padding (native mobile standard) */}
-      <div className="relative px-4 py-4">
-        <div className="relative flex items-start justify-between gap-4">
-          {/* Balance Section - Following 8dp grid system */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-start gap-3">
-              {/* Coin Stack - Visual affordance (Don Norman) */}
-              <div className="relative h-12 flex items-end flex-shrink-0" aria-hidden="true">
-                <motion.div 
-                  className="w-12 h-3 rounded-full bg-gradient-to-br from-gold via-yellow-400 to-yellow-500 border-2 border-gold/70 shadow-md"
-                  animate={{ 
+      <div className="relative px-4 py-5">
+        {/* Top Row: Balance and Clock */}
+        <div className="flex items-center justify-between gap-6 mb-4">
+          {/* Left: Balance with Coin Stack */}
+          <div className="flex items-center gap-3">
+            {/* Coin Stack */}
+            <div className="relative h-14 flex items-end flex-shrink-0" aria-hidden="true">
+              <motion.div 
+                className="w-14 h-3.5 rounded-full bg-gradient-to-br from-gold via-yellow-400 to-yellow-500 border-2 border-gold/70 shadow-md"
+                animate={{ 
+                  scale: isActive ? [1, 1.05, 1] : 1,
+                  y: isActive ? [0, -2, 0] : 0 
+                }}
+                transition={{ duration: 1, repeat: isActive ? Infinity : 0 }}
+              />
+              <motion.div 
+                className="absolute top-[-6px] left-0 w-14 h-3.5 rounded-full bg-gradient-to-br from-gold via-yellow-400 to-yellow-500 border-2 border-gold/70 shadow-md"
+                animate={{ 
+                  scale: isActive ? [1, 1.05, 1] : 1,
+                  y: isActive ? [0, -2, 0] : 0 
+                }}
+                transition={{ duration: 1, repeat: isActive ? Infinity : 0, delay: 0.1 }}
+              />
+              <motion.div 
+                className="absolute top-[-12px] left-0 w-14 h-3.5 rounded-full bg-gradient-to-br from-gold via-yellow-400 to-yellow-500 border-2 border-gold/70 shadow-md"
+                animate={{ 
                     scale: isActive ? [1, 1.05, 1] : 1,
                     y: isActive ? [0, -2, 0] : 0 
                   }}
-                  transition={{ duration: 1, repeat: isActive ? Infinity : 0 }}
-                />
-                <motion.div 
-                  className="absolute top-[-5px] left-0 w-12 h-3 rounded-full bg-gradient-to-br from-gold via-yellow-400 to-yellow-500 border-2 border-gold/70 shadow-md"
-                  animate={{ 
-                    scale: isActive ? [1, 1.05, 1] : 1,
-                    y: isActive ? [0, -2, 0] : 0 
-                  }}
-                  transition={{ duration: 1, repeat: isActive ? Infinity : 0, delay: 0.1 }}
-                />
-                <motion.div 
-                  className="absolute top-[-10px] left-0 w-12 h-3 rounded-full bg-gradient-to-br from-gold via-yellow-400 to-yellow-500 border-2 border-gold/70 shadow-md"
-                  animate={{ 
-                    scale: isActive ? [1, 1.05, 1] : 1,
-                    y: isActive ? [0, -2, 0] : 0 
-                  }}
-                  transition={{ duration: 1, repeat: isActive ? Infinity : 0, delay: 0.2 }}
-                />
-              </div>
+                transition={{ duration: 1, repeat: isActive ? Infinity : 0, delay: 0.2 }}
+              />
+            </div>
 
-              {/* Balance Text - Optimized for scanning (Steve Krug) */}
-              <div className="flex-1 min-w-0">
-                {/* 12sp caption (Android) / 12pt caption (iOS) */}
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-1" data-testid="text-balance-label">
-                  Stush Wage Balance:
-                </p>
-                {/* 32sp headline (Android) / 28pt large title (iOS) */}
-                <p className="text-3xl font-bold text-foreground tabular-nums leading-tight" data-testid="text-balance-amount">
-                  ${balance.toFixed(2)}
-                </p>
-              </div>
+            {/* Balance Amount */}
+            <div>
+              <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-0.5" data-testid="text-balance-label">
+                Stush Wage Balance:
+              </p>
+              <p className="text-3xl font-bold text-foreground tabular-nums leading-none" data-testid="text-balance-amount">
+                ${balance.toFixed(2)}
+              </p>
             </div>
           </div>
 
-          {/* Flying Coins Animation - Emotional design (Aarron Walter) */}
+          {/* Flying Coins Animation */}
           <AnimatePresence>
             {coins.map((coin) => (
               <motion.div
@@ -110,7 +105,7 @@ export default function ClockToMoneyAnimation({ isActive, balance, workHours, ho
                 className="absolute z-50"
                 style={{ 
                   right: '35%',
-                  top: '30%',
+                  top: '35%',
                   translateY: `${coin.startY}px` 
                 }}
                 initial={{ x: 0, y: 0, opacity: 0, scale: 0.3, rotate: 0 }}
@@ -139,121 +134,111 @@ export default function ClockToMoneyAnimation({ isActive, balance, workHours, ho
             ))}
           </AnimatePresence>
 
-          {/* Clock Section - Minimal design (Dieter Rams) */}
-          <div className="flex-1 flex flex-col items-end min-w-0">
-            {/* Clock - 88dp/pt touch target (native standard) */}
-            <div className="relative mb-3" data-testid="clock-display">
-              {/* Feedback animation (Don Norman) */}
-              {isActive && (
-                <>
-                  <motion.div 
-                    className="absolute inset-0 rounded-full bg-chart-1/20"
-                    animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    style={{ width: 96, height: 96, left: -4, top: -4 }}
-                    aria-hidden="true"
-                  />
-                  <motion.div 
-                    className="absolute inset-0 rounded-full bg-gold/10"
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0, 0.3] }}
-                    transition={{ duration: 1.5, repeat: Infinity, delay: 0.5 }}
-                    style={{ width: 96, height: 96, left: -4, top: -4 }}
-                    aria-hidden="true"
-                  />
-                </>
-              )}
-              
-              {/* Clock Face - 88dp size (Material Design touch target) */}
-              <div className={`relative w-[88px] h-[88px] rounded-full ${isActive ? 'bg-gradient-to-br from-chart-1 to-chart-2' : 'bg-gradient-to-br from-muted to-muted/70'} border-[3px] ${isActive ? 'border-white/30' : 'border-border'} shadow-lg`}>
-                {/* Clock Numbers - Accessibility (Farai Madzima) */}
-                {clockNumbers.map((num, index) => {
-                  const angle = (index * 30 - 90) * (Math.PI / 180);
-                  const radius = 32;
-                  const x = Math.cos(angle) * radius;
-                  const y = Math.sin(angle) * radius;
-                  return (
-                    <div
-                      key={num}
-                      className={`absolute text-[9px] font-bold ${isActive ? 'text-white/95' : 'text-muted-foreground'} select-none`}
-                      style={{
-                        left: '50%',
-                        top: '50%',
-                        transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`
-                      }}
-                      aria-hidden="true"
-                    >
-                      {num}
-                    </div>
-                  );
-                })}
-
-                {/* Hour markers - Visual hierarchy (Susan Weinschenk) */}
-                {Array.from({ length: 12 }).map((_, i) => (
+          {/* Right: Clock */}
+          <div className="relative flex-shrink-0" data-testid="clock-display">
+            {isActive && (
+              <>
+                <motion.div 
+                  className="absolute inset-0 rounded-full bg-chart-1/20"
+                  animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  style={{ width: 96, height: 96, left: -4, top: -4 }}
+                  aria-hidden="true"
+                />
+                <motion.div 
+                  className="absolute inset-0 rounded-full bg-gold/10"
+                  animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0, 0.3] }}
+                  transition={{ duration: 1.5, repeat: Infinity, delay: 0.5 }}
+                  style={{ width: 96, height: 96, left: -4, top: -4 }}
+                  aria-hidden="true"
+                />
+              </>
+            )}
+            
+            <div className={`relative w-[88px] h-[88px] rounded-full ${isActive ? 'bg-gradient-to-br from-chart-1 to-chart-2' : 'bg-gradient-to-br from-muted to-muted/70'} border-[3px] ${isActive ? 'border-white/30' : 'border-border'} shadow-lg`}>
+              {clockNumbers.map((num, index) => {
+                const angle = (index * 30 - 90) * (Math.PI / 180);
+                const radius = 32;
+                const x = Math.cos(angle) * radius;
+                const y = Math.sin(angle) * radius;
+                return (
                   <div
-                    key={i}
-                    className={`absolute w-0.5 h-1.5 ${isActive ? 'bg-white/40' : 'bg-muted-foreground/40'}`}
+                    key={num}
+                    className={`absolute text-[9px] font-bold ${isActive ? 'text-white/95' : 'text-muted-foreground'} select-none`}
                     style={{
                       left: '50%',
-                      top: '6px',
-                      transformOrigin: '50% 38px',
-                      transform: `translateX(-50%) rotate(${i * 30}deg)`
+                      top: '50%',
+                      transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`
                     }}
                     aria-hidden="true"
-                  />
-                ))}
+                  >
+                    {num}
+                  </div>
+                );
+              })}
 
-                {/* Hour Hand */}
-                <div 
-                  className={`absolute w-1 h-6 ${isActive ? 'bg-white' : 'bg-muted-foreground'} rounded-full origin-bottom`} 
-                  style={{ 
+              {Array.from({ length: 12 }).map((_, i) => (
+                <div
+                  key={i}
+                  className={`absolute w-0.5 h-1.5 ${isActive ? 'bg-white/40' : 'bg-muted-foreground/40'}`}
+                  style={{
                     left: '50%',
-                    top: '50%',
-                    transform: `translate(-50%, -100%) rotate(${(parseInt(hours) % 12) * 30 + parseInt(minutes) * 0.5}deg)` 
+                    top: '6px',
+                    transformOrigin: '50% 38px',
+                    transform: `translateX(-50%) rotate(${i * 30}deg)`
                   }}
                   aria-hidden="true"
                 />
-                
-                {/* Minute Hand */}
-                <div 
-                  className={`absolute w-0.5 h-9 ${isActive ? 'bg-white/90' : 'bg-muted-foreground/90'} rounded-full origin-bottom`} 
-                  style={{ 
-                    left: '50%',
-                    top: '50%',
-                    transform: `translate(-50%, -100%) rotate(${parseInt(minutes) * 6}deg)` 
-                  }}
-                  aria-hidden="true"
-                />
+              ))}
 
-                {/* Center Dot */}
-                <div className={`absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full ${isActive ? 'bg-white' : 'bg-muted-foreground'} shadow-sm`} style={{ transform: 'translate(-50%, -50%)' }} aria-hidden="true" />
-              </div>
-            </div>
-
-            {/* Status & Info - Information chunking (Susan Weinschenk) */}
-            <div className="text-right w-full">
-              {/* Status Indicator - Clear signifiers (Don Norman) */}
-              <div className="flex items-center gap-2 justify-end mb-2">
-                <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide" data-testid="text-status-label">Status:</span>
-                <div className="flex items-center gap-1.5">
-                  <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-success-green animate-pulse' : 'bg-muted-foreground'}`} aria-hidden="true" />
-                  <span className={`text-sm font-semibold ${isActive ? 'text-success-green' : 'text-muted-foreground'}`} data-testid="text-status-value">
-                    {isActive ? 'On the Clock' : 'Off Duty'}
-                  </span>
-                </div>
-              </div>
+              <div 
+                className={`absolute w-1 h-6 ${isActive ? 'bg-white' : 'bg-muted-foreground'} rounded-full origin-bottom`} 
+                style={{ 
+                  left: '50%',
+                  top: '50%',
+                  transform: `translate(-50%, -100%) rotate(${(parseInt(hours) % 12) * 30 + parseInt(minutes) * 0.5}deg)` 
+                }}
+                aria-hidden="true"
+              />
               
-              {/* Work Hours - Scannable layout (Steve Krug) */}
-              <div className="space-y-0.5">
-                <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide" data-testid="text-hours-label">Work Hours:</p>
-                {/* 20sp title (Android) / 20pt title3 (iOS) */}
-                <p className={`text-xl font-bold tabular-nums ${isActive ? 'text-chart-1' : 'text-muted-foreground'}`} data-testid="text-hours-value">
-                  {workHours.toFixed(2)} HRS.
-                </p>
-                {/* 12sp body2 (Android) / 12pt footnote (iOS) */}
-                <p className="text-xs text-muted-foreground" data-testid="text-rate">
-                  @ ${hourlyRate.toFixed(2)}/hr
-                </p>
-              </div>
+              <div 
+                className={`absolute w-0.5 h-9 ${isActive ? 'bg-white/90' : 'bg-muted-foreground/90'} rounded-full origin-bottom`} 
+                style={{ 
+                  left: '50%',
+                  top: '50%',
+                  transform: `translate(-50%, -100%) rotate(${parseInt(minutes) * 6}deg)` 
+                }}
+                aria-hidden="true"
+              />
+
+              <div className={`absolute top-1/2 left-1/2 w-2.5 h-2.5 rounded-full ${isActive ? 'bg-white' : 'bg-muted-foreground'} shadow-sm`} style={{ transform: 'translate(-50%, -50%)' }} aria-hidden="true" />
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Row: Status and Work Hours */}
+        <div className="flex items-end justify-between gap-4 pt-2 border-t border-border/50">
+          {/* Left: Status */}
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide" data-testid="text-status-label">Status:</span>
+            <div className="flex items-center gap-1.5">
+              <div className={`w-2 h-2 rounded-full ${isActive ? 'bg-success-green animate-pulse' : 'bg-muted-foreground'}`} aria-hidden="true" />
+              <span className={`text-sm font-semibold ${isActive ? 'text-success-green' : 'text-muted-foreground'}`} data-testid="text-status-value">
+                {isActive ? 'On the Clock' : 'Off Duty'}
+              </span>
+            </div>
+          </div>
+          
+          {/* Right: Work Hours */}
+          <div className="text-right">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-0.5" data-testid="text-hours-label">Work Hours:</p>
+            <div className="flex items-baseline gap-2 justify-end">
+              <p className={`text-2xl font-bold tabular-nums ${isActive ? 'text-chart-1' : 'text-muted-foreground'}`} data-testid="text-hours-value">
+                {workHours.toFixed(2)} HRS.
+              </p>
+              <p className="text-xs text-muted-foreground" data-testid="text-rate">
+                @ ${hourlyRate.toFixed(2)}/hr
+              </p>
             </div>
           </div>
         </div>
