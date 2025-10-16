@@ -53,15 +53,46 @@ export default function ClockToMoneyAnimation({ isActive, balance, workHours, ho
       
       <div className="relative px-6 py-8">
         <div className="relative flex items-center justify-between gap-6">
-          {/* Balance */}
+          {/* Balance with Coin Stack */}
           <div className="flex-1 space-y-3">
-            <div className="space-y-1">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                Stush Wage Balance:
-              </p>
-              <p className="text-3xl font-bold text-foreground tabular-nums">
-                ${balance.toFixed(2)}
-              </p>
+            <div className="flex items-center gap-3">
+              {/* Coin Stack */}
+              <div className="relative">
+                <motion.div 
+                  className="w-12 h-4 rounded-full bg-gradient-to-br from-gold to-yellow-500 border-2 border-gold/60 shadow-lg"
+                  animate={{ 
+                    scale: isActive ? [1, 1.05, 1] : 1,
+                    y: isActive ? [0, -2, 0] : 0 
+                  }}
+                  transition={{ duration: 1, repeat: isActive ? Infinity : 0 }}
+                />
+                <motion.div 
+                  className="absolute top-[-5px] left-0 w-12 h-4 rounded-full bg-gradient-to-br from-gold to-yellow-500 border-2 border-gold/60 shadow-lg"
+                  animate={{ 
+                    scale: isActive ? [1, 1.05, 1] : 1,
+                    y: isActive ? [0, -2, 0] : 0 
+                  }}
+                  transition={{ duration: 1, repeat: isActive ? Infinity : 0, delay: 0.1 }}
+                />
+                <motion.div 
+                  className="absolute top-[-10px] left-0 w-12 h-4 rounded-full bg-gradient-to-br from-gold to-yellow-500 border-2 border-gold/60 shadow-lg"
+                  animate={{ 
+                    scale: isActive ? [1, 1.05, 1] : 1,
+                    y: isActive ? [0, -2, 0] : 0 
+                  }}
+                  transition={{ duration: 1, repeat: isActive ? Infinity : 0, delay: 0.2 }}
+                />
+              </div>
+
+              {/* Balance Text */}
+              <div className="space-y-1">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  Stush Wage Balance:
+                </p>
+                <p className="text-3xl font-bold text-foreground tabular-nums">
+                  ${balance.toFixed(2)}
+                </p>
+              </div>
             </div>
           </div>
 
