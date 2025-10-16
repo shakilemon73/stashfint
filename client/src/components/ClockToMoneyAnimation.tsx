@@ -48,43 +48,13 @@ export default function ClockToMoneyAnimation({ isActive, balance, workHours, ho
   const minutes = time.getMinutes().toString().padStart(2, '0');
 
   return (
-    <div className="relative">
+    <div className="relative overflow-visible">
       <div className="absolute inset-0 bg-gradient-to-br from-chart-1/10 via-gold/10 to-chart-2/10 rounded-3xl" />
       
       <div className="relative px-6 py-8">
         <div className="relative flex items-center justify-between gap-6">
-          {/* Balance with Coin Stack */}
+          {/* Balance */}
           <div className="flex-1 space-y-3">
-            <div className="relative h-24 flex items-end justify-start">
-              {/* Coin Stack */}
-              <div className="relative">
-                <motion.div 
-                  className="w-16 h-4 rounded-full bg-gold border-2 border-gold/60 shadow-lg"
-                  animate={{ 
-                    scale: isActive ? [1, 1.05, 1] : 1,
-                    y: isActive ? [0, -2, 0] : 0 
-                  }}
-                  transition={{ duration: 1, repeat: isActive ? Infinity : 0 }}
-                />
-                <motion.div 
-                  className="absolute top-[-6px] left-0 w-16 h-4 rounded-full bg-gold border-2 border-gold/60 shadow-lg"
-                  animate={{ 
-                    scale: isActive ? [1, 1.05, 1] : 1,
-                    y: isActive ? [0, -2, 0] : 0 
-                  }}
-                  transition={{ duration: 1, repeat: isActive ? Infinity : 0, delay: 0.1 }}
-                />
-                <motion.div 
-                  className="absolute top-[-12px] left-0 w-16 h-4 rounded-full bg-gold border-2 border-gold/60 shadow-lg"
-                  animate={{ 
-                    scale: isActive ? [1, 1.05, 1] : 1,
-                    y: isActive ? [0, -2, 0] : 0 
-                  }}
-                  transition={{ duration: 1, repeat: isActive ? Infinity : 0, delay: 0.2 }}
-                />
-              </div>
-            </div>
-
             <div className="space-y-1">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                 Stush Wage Balance:
@@ -100,27 +70,32 @@ export default function ClockToMoneyAnimation({ isActive, balance, workHours, ho
             {coins.map((coin) => (
               <motion.div
                 key={coin.id}
-                className="absolute top-1/2"
+                className="absolute z-50"
                 style={{ 
-                  right: '15%',
+                  right: '30%',
+                  top: '25%',
                   translateY: `${coin.startY}px` 
                 }}
-                initial={{ x: 0, y: 0, opacity: 0, scale: 0.5, rotate: 0 }}
+                initial={{ x: 0, y: 0, opacity: 0, scale: 0.3, rotate: 0 }}
                 animate={{ 
-                  x: [0, -200, -400],
-                  y: [0, -25, 15],
-                  opacity: [0, 1, 0],
-                  scale: [0.5, 1, 0.6],
-                  rotate: [0, 180, 360],
+                  x: [-10, -100, -180, -250],
+                  y: [0, -30, -20, 10],
+                  opacity: [0, 1, 1, 0.8],
+                  scale: [0.3, 0.8, 1, 0.7],
+                  rotate: [0, 90, 180, 270],
                 }}
-                exit={{ opacity: 0 }}
+                exit={{ opacity: 0, scale: 0 }}
                 transition={{ 
-                  duration: 2,
+                  duration: 1.8,
                   ease: [0.4, 0.0, 0.2, 1],
+                  times: [0, 0.3, 0.6, 1]
                 }}
               >
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gold to-yellow-600 border-2 border-gold/50 shadow-xl flex items-center justify-center">
-                  <Coins className="w-5 h-5 text-white" />
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-full bg-gold/40 blur-md" />
+                  <div className="relative w-12 h-12 rounded-full bg-gradient-to-br from-gold via-yellow-400 to-yellow-600 border-3 border-yellow-300/70 shadow-2xl flex items-center justify-center">
+                    <span className="text-lg font-bold text-white">$</span>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -130,12 +105,20 @@ export default function ClockToMoneyAnimation({ isActive, balance, workHours, ho
           <div className="flex-1 flex flex-col items-end space-y-3">
             <div className="relative">
               {isActive && (
-                <motion.div 
-                  className="absolute inset-0 rounded-full bg-chart-1/20"
-                  animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  style={{ width: 100, height: 100 }}
-                />
+                <>
+                  <motion.div 
+                    className="absolute inset-0 rounded-full bg-chart-1/20"
+                    animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    style={{ width: 100, height: 100 }}
+                  />
+                  <motion.div 
+                    className="absolute inset-0 rounded-full bg-gold/10"
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0, 0.3] }}
+                    transition={{ duration: 1.5, repeat: Infinity, delay: 0.5 }}
+                    style={{ width: 100, height: 100 }}
+                  />
+                </>
               )}
               <div className={`relative w-24 h-24 rounded-full ${isActive ? 'bg-gradient-to-br from-chart-1 to-chart-2' : 'bg-muted'} border-4 ${isActive ? 'border-white/20' : 'border-muted/40'} flex items-center justify-center shadow-xl`}>
                 <Clock className={`w-10 h-10 ${isActive ? 'text-white' : 'text-muted-foreground'}`} />
