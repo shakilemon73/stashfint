@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Home, Zap, TrendingUp, Clock, User } from "lucide-react";
+import { motion } from "framer-motion";
 
 type NavItem = {
   id: string;
@@ -33,26 +34,55 @@ export default function SimpleBottomNav() {
             const isActive = active === item.id;
 
             return (
-              <button
+              <motion.button
                 key={item.id}
                 onClick={() => {
                   setActive(item.id);
                   console.log(`Navigated to ${item.label}`);
                 }}
-                className={`flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all min-h-[64px] min-w-[64px] justify-center ${
+                className={`relative flex flex-col items-center gap-1 px-4 py-2 rounded-xl transition-all min-h-[64px] min-w-[64px] justify-center ${
                   isActive 
-                    ? 'text-gold bg-gold/10 border border-gold/20' 
+                    ? 'text-gold' 
                     : 'text-muted-foreground hover-elevate'
                 }`}
                 data-testid={item.testId}
                 aria-label={`Navigate to ${item.label}`}
                 aria-current={isActive ? 'page' : undefined}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <Icon className="w-6 h-6" aria-hidden="true" />
-                <span className={`text-xs font-semibold ${isActive ? 'text-gold' : 'text-muted-foreground'}`}>
+                {/* Active state glow */}
+                {isActive && (
+                  <>
+                    <motion.div 
+                      className="absolute inset-0 bg-gold/10 rounded-xl border border-gold/20"
+                      layoutId="activeTab"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                    <motion.div 
+                      className="absolute -inset-1 bg-gold/20 rounded-xl blur-md"
+                      animate={{
+                        opacity: [0.3, 0.5, 0.3],
+                      }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      aria-hidden="true"
+                    />
+                  </>
+                )}
+                
+                <motion.div
+                  animate={isActive ? {
+                    scale: [1, 1.1, 1],
+                  } : {}}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Icon className="w-6 h-6 relative z-10" aria-hidden="true" />
+                </motion.div>
+                
+                <span className={`text-xs font-semibold relative z-10 ${isActive ? 'text-gold' : 'text-muted-foreground'}`}>
                   {item.label}
                 </span>
-              </button>
+              </motion.button>
             );
           })}
         </div>
