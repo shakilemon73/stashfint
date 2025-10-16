@@ -1,4 +1,5 @@
-import { Bell, Menu } from "lucide-react";
+import { Bell, Menu, User } from "lucide-react";
+import StushLogo from "./StushLogo";
 
 interface SimpleHeaderProps {
   userName: string;
@@ -16,19 +17,35 @@ export default function SimpleHeader({ userName, hasNotifications = false, notif
       role="banner"
     >
       <div className="flex items-center justify-between p-4">
-        <div className="flex items-center gap-3">
+        {/* Left: Stush Logo & User */}
+        <div className="flex items-center gap-4">
+          <StushLogo size="sm" animated={true} />
+          
+          {/* User greeting - visible on larger screens */}
+          <div className="hidden sm:flex items-center gap-3 border-l border-border/50 pl-4">
+            <button
+              onClick={() => console.log('Profile clicked')}
+              className="w-10 h-10 rounded-2xl bg-gradient-gold-green flex items-center justify-center font-display text-sm font-bold text-white hover-elevate active-elevate-2 transition-all shadow-lg"
+              data-testid="avatar-user"
+              aria-label={`View profile for ${userName}`}
+            >
+              {initials}
+            </button>
+            <div>
+              <p className="text-xs text-muted-foreground font-semibold">Welcome back</p>
+              <p className="font-bold text-foreground" data-testid="text-username">{userName}</p>
+            </div>
+          </div>
+
+          {/* Mobile user avatar */}
           <button
             onClick={() => console.log('Profile clicked')}
-            className="w-12 h-12 rounded-2xl bg-gradient-to-br from-chart-1 to-chart-2 flex items-center justify-center font-display text-base font-bold text-black hover-elevate active-elevate-2 transition-all"
-            data-testid="avatar-user"
+            className="sm:hidden w-10 h-10 rounded-2xl bg-gradient-gold-green flex items-center justify-center hover-elevate active-elevate-2 transition-all shadow-lg"
+            data-testid="avatar-user-mobile"
             aria-label={`View profile for ${userName}`}
           >
-            {initials}
+            <User className="w-5 h-5 text-white" />
           </button>
-          <div>
-            <p className="text-xs text-muted-foreground font-semibold">Welcome back</p>
-            <p className="font-bold text-foreground" data-testid="text-username">{userName}</p>
-          </div>
         </div>
 
         <div className="flex items-center gap-2">
